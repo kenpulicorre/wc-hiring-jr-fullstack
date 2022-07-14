@@ -12,7 +12,7 @@ import $t from "./libs/test.js";
 //-------------
 import $t2 from "./libs/1-source-data.js";
 
-//-----------
+//----------
 
 /*
 1. Data manipulation:
@@ -48,20 +48,36 @@ $t.answer(1, async () => {
     balance = 0,
     expenses = 0;
   const d1 = $t2;
-  d1.forEach((e) => {
-    if (e.category == "Restaurants") {
-      Restaurants = Restaurants + e.amount;
+  // d1.forEach((e) => {
+  //   if (e.category == "Restaurants") {
+  //     Restaurants = Restaurants + e.amount;
+  //   } else if (e.category == "Income") {
+  //     Income = Income + e.amount;
+  //   } else if (e.category == "Groceries") {
+  //     Groceries = Groceries + e.amount;
+  //   } else if (e.category == "Rent") {
+  //     Rent = Rent + e.amount;
+  //   }
+  // });
+
+  for (let i = 0; i < d1.length; i++) {
+    switch (d1[i].category) {
+      case "Restaurants":
+        Restaurants = Restaurants + d1[i].amount;
+        break;
+      case "Income":
+        Income = Income + d1[i].amount;
+        break;
+      case "Groceries":
+        Groceries = Groceries + d1[i].amount;
+        break;
+      case "Rent":
+        Rent = Rent + d1[i].amount;
+      default:
+        break;
     }
-    if (e.category == "Income") {
-      Income = Income + e.amount;
-    }
-    if (e.category == "Groceries") {
-      Groceries = Groceries + e.amount;
-    }
-    if (e.category == "Rent") {
-      Rent = Rent + e.amount;
-    }
-  });
+  }
+
   expenses = Restaurants + Groceries + Rent;
   balance = Income - (Restaurants + Groceries + Rent);
   let Target = {
@@ -80,17 +96,25 @@ $t.answer(1, async () => {
 });
 
 /*
-2. Asynchronous programming: 
+2. Asynchronous programming:
   1. First get the list of ids from the async function $source.getIds()
   2. Then, for every id call the async function $source.getText(id) to get its text
   3. Finally, return the list of resulting texts as an array.
-    
+
 */
 const $source = $t.source(2);
+
 $t.answer(2, async () => {
   // Your code goes here:
   // 1. Get ids: $source.getIds()
+  let x = await $source.getIds();
+  let n = x;
   // 2. Get text for every id: $source.getText(id)
+  let array = n.map(async (e) => await $source.getText(e));
+
+  let bb = Promise.all(array).then((values) => {
+    return values;
+  });
   // 3. Return array of texts
-  return;
+  return bb;
 });
